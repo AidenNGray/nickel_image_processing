@@ -99,37 +99,10 @@ forceBounds = [20 300; 30 300; 40 300]; % in pounds
 targetSlope = [20 30 40]; % in pounds / mm
 lengths = 1.5;
 widths = [.4 .46 .355];
+gaugeLength = 1;
 
 % Cross sections
 crossSections = lengths .* widths;
-
-% Other strain calcs
-%   Cross sections
-holderShaftArea = 19.1;
-holderFlangeArea = 42.1;
-waterCoolerArea = (42.2^2) * pi;
-railGuideArea = (83.4 - 6.35)^2 * sqrt(3) / 4;
-loadCellArea = (25.2^2) * pi;
-bigHunkArea = (41.25^2) * pi;
-screwFlangeArea = (41.25^2) * pi;
-screwBaseArea = (19.1^2) * pi;
-screwArea = (9.4^2) * pi;
-
-%   Starting lengths
-holderBottomShaftLen = 51.55;
-holderTopShaftLen = 75.55;
-holderFlangeLen = 3.15;
-waterCoolerLen = 20.75;
-railGuideLen = 10; % FAKE NUMBER: Need update
-loadCellLen = 14;
-bigHunkLen = 49.7;
-screwFlangeLen = 7;
-screwBaseLen = 41.7;
-screwLen = 15.3;
-
-%   Young's moduli
-stainlessSteel = 200;
-aluminum = 69;
 
 % Plotting displacement vs load with min/max force bounds
 for fb = 1:length(forceBounds)
@@ -137,7 +110,7 @@ for fb = 1:length(forceBounds)
     hold on;
     for i = 1:numel(samples)
         currentTable = inSituLoadingData.(samples{i});
-        plotDisplacementStressBounds(currentTable, crossSections(i), forceBounds(fb,:), colors(i))
+        plotStrainStressBounds(currentTable, crossSections(i), gaugeLength, forceBounds(fb,:), colors(i))
     end
     xlabel("Relative Displacement (um)");
     ylabel("Stress (MPa)");
@@ -153,7 +126,7 @@ for ts = 1:length(targetSlope)
     hold on;
     for i = 1:numel(samples)
         currentTable = inSituLoadingData.(samples{i});
-        plotDisplacementStressSlope(currentTable, crossSections(i), targetSlope(ts), colors(i))
+        plotStrainStressSlope(currentTable, crossSections(i), gaugeLength, targetSlope(ts), colors(i))
     end
     xlabel("Relative Displacement (um)");
     ylabel("Stress (MPa)");

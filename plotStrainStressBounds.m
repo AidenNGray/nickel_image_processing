@@ -1,14 +1,14 @@
-function plotDisplacementStressBounds(dataTable, crossSection, forceBounds, color)
+function plotStrainStressBounds(dataTable, crossSection, gaugeLength, forceBounds, color)
 %PLOTDISPLACEMENTLOAD Plots relative displacement and absolute load values
 %from sample computer at ALS 8.3.2
 %   Data must be in tabular form with default var names. Use forceBounds
 %   to set limits on force values. Must Color changes plot color. Must be
 %   valid MATLAB color identifier.
 
-if nargin < 3
+if nargin < 4
     forceBounds = [0 300];
     color = rand(1,3);
-elseif nargin < 4
+elseif nargin < 5
     color = rand(1,3);
 end
 
@@ -22,10 +22,14 @@ force = force(trueValues);
 tempAbsDis = absDisplacement(trueValues);
 relDisplacement = tempAbsDis - tempAbsDis(1);
 
-% Computing stress
+aparatusElong = elongationCalc(dataTable);
+sampleElong = (relDisplacement*1000) - aparatusElong(trueValues);
+
+% Computing stress & strain
 stress = force ./ crossSection;
+strain = sampleElong ./ gaugeLength;
 
 % Plotting
-plot(relDisplacement, stress, 'Color', color)
+plot(strain, stress, 'Color', color)
 
 end
