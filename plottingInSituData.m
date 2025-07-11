@@ -1,6 +1,7 @@
 % Plotting in situ data
 
 load("inSituLoadingData.mat")
+inSituLoadingData = rmfield(inSituLoadingData,'SampleNoH_1');
 
 %% Plotting displacement vs load
 figure;
