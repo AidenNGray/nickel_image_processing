@@ -1,14 +1,14 @@
-function plotDisplacementLoadSlope(dataTable, targetSlope, color, forceMax)
+function plotDisplacementStressSlope(dataTable, crossSection, targetSlope, color, forceMax)
 %PLOT_DIS_LOAD_SLOPE Starts curve based on target slope
 %   Uses a likely inefficient algorithm to find slope between each data
 %   point. targetSlope is the threshold to start. Should probably be 
 %   something near young's modulus. forceMax is used to cut bad data 
 %   points, 300 by default.
 
-if nargin < 3
+if nargin < 4
     color = rand(1,3);
     forceMax = 300;
-elseif nargin < 4
+elseif nargin < 5
     forceMax = 300;
 end
 
@@ -43,6 +43,8 @@ force = force(index(ix):end);
 absDisplacement = absDisplacement(index(ix):end);
 relDisplacement = absDisplacement - absDisplacement(1);
 
+stress = (force*4.448) ./ crossSection;
+
 % Plotting
-plot(relDisplacement, force, 'Color', color)
+plot(relDisplacement, stress, 'Color', color)
 end
