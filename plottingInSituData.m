@@ -3,6 +3,23 @@
 load("inSituLoadingData.mat")
 inSituLoadingData = rmfield(inSituLoadingData,'SampleNoH_1');
 
+%% Baseline
+figure;
+colors = ['r' 'b' 'g'];
+samples = fieldnames(inSituLoadingData);
+
+hold on;
+for i = 1:numel(samples)
+    currentTable = inSituLoadingData.(samples{i});
+    plotDisplacementLoadBounds(currentTable, [-300 300], colors(i))
+end
+xlabel("Relative Displacement");
+ylabel("Force (lb)");
+title("Baseline In Situ Force Data - Displacement vs Force")
+legend(samples, "Location","southeast")
+
+hold off;
+
 %% Displacement vs Load
 % Configs
 tiledlayout(2, 3)
@@ -50,9 +67,9 @@ tiledlayout(2, 3)
 colors = ['r' 'b' 'g'];
 samples = fieldnames(inSituLoadingData);
 forceBounds = [20 300; 30 300; 40 300]; % in pounds
-targetSlope = [20 30 40]; % in pounds / mm
-lengths = 1.5;
-widths = [.4 .46 .355];
+targetSlope = [20 30 40]; % in pounds / um
+lengths = 1.5; % mm
+widths = [.4 .46 .355]; % mm
 
 % Cross sections
 crossSections = lengths .* widths;
@@ -96,10 +113,10 @@ tiledlayout(2, 3)
 colors = ['r' 'b' 'g'];
 samples = fieldnames(inSituLoadingData);
 forceBounds = [20 300; 30 300; 40 300]; % in pounds
-targetSlope = [20 30 40]; % in pounds / mm
-lengths = 1.5;
-widths = [.4 .46 .355];
-gaugeLength = 1;
+targetSlope = [20 30 40]; % in pounds / um
+lengths = 1.5; % mm
+widths = [.4 .46 .355]; % mm
+gaugeLength = 7.62; % mm
 
 % Cross sections
 crossSections = lengths .* widths;
@@ -128,7 +145,7 @@ for ts = 1:length(targetSlope)
         currentTable = inSituLoadingData.(samples{i});
         plotStrainStressSlope(currentTable, crossSections(i), gaugeLength, targetSlope(ts), colors(i))
     end
-    xlabel("Relative Displacement (um)");
+    xlabel("'Strain' (mm/mm)");
     ylabel("Stress (MPa)");
     title(sprintf("In Situ Force Data w/ Slope Target (%.1f lb/um)", targetSlope(ts)))
     legend(samples, "Location","southeast")

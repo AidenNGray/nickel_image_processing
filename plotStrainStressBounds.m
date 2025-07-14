@@ -14,16 +14,17 @@ end
 
 % Loading data
 absDisplacement = dataTable.LoadingStageum;
-force = dataTable.LoadCellN;
+forceLB = dataTable.LoadCelllb;
+forceN = dataTable.LoadCellN;
 
 % Selecting data within bounds
-trueValues = (forceBounds(1) * 4.448 < force) & (force < forceBounds(2) * 4.448);
-force = force(trueValues);
+trueValues = (forceBounds(1) < forceLB) & (forceLB < forceBounds(2));
+force = forceN(trueValues);
 tempAbsDis = absDisplacement(trueValues);
 relDisplacement = tempAbsDis - tempAbsDis(1);
 
-aparatusElong = elongationCalc(dataTable);
-sampleElong = (relDisplacement*1000) - aparatusElong(trueValues);
+aparatusElong = elongationCalc(dataTable); % mm
+sampleElong = (relDisplacement./1000) - aparatusElong(trueValues);
 
 % Computing stress & strain
 stress = force ./ crossSection;
