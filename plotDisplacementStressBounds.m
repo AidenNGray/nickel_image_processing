@@ -14,18 +14,24 @@ end
 
 % Loading data
 absDisplacement = dataTable.LoadingStageum;
-force = dataTable.LoadCellN;
+forceLB = dataTable.LoadCelllb;
+forceN = dataTable.LoadCellN;
 
 % Selecting data within bounds
-trueValues = (forceBounds(1) * 4.448 < force) & (force < forceBounds(2) * 4.448);
-force = force(trueValues);
-tempAbsDis = absDisplacement(trueValues);
-relDisplacement = tempAbsDis - tempAbsDis(1);
+startIx = 2500; % Avoid bad data to start
+trueValues = (forceBounds(1) < forceLB(startIx:end)) & (forceLB(startIx:end) < forceBounds(2));
+
+forceN = forceN(startIx:end);
+force = forceN(trueValues);
+
+absDisplacement = absDisplacement(startIx:end);
+absDisplacement = absDisplacement(trueValues);
+relDisplacement = absDisplacement - absDisplacement(1);
 
 % Computing stress
 stress = force ./ crossSection;
 
 % Plotting
-plot(relDisplacement, stress, 'Color', color)
+plot(relDisplacement, stress, 'Color', color, 'LineWidth',3)
 
 end

@@ -25,7 +25,7 @@ hold off;
 tiledlayout(2, 3)
 colors = ['r' 'b' 'g'];
 samples = fieldnames(inSituLoadingData);
-forceBounds = [20 300; 30 300; 40 300]; 
+forceBounds = [3 300; 5 300; -10 300]; 
 targetSlope = [20 30 40]; 
 
 % Plotting displacement vs load with min/max force bounds
@@ -66,7 +66,7 @@ figure;
 tiledlayout(2, 3)
 colors = ['r' 'b' 'g'];
 samples = fieldnames(inSituLoadingData);
-forceBounds = [20 300; 30 300; 40 300]; % in pounds
+forceBounds = [3 300; 5 300; -10 300]; % in pounds
 targetSlope = [20 30 40]; % in pounds / um
 lengths = 1.5; % mm
 widths = [.4 .46 .355]; % mm
@@ -152,3 +152,27 @@ for ts = 1:length(targetSlope)
 
     hold off;
 end
+
+%% Poster draft plots
+% Configs
+colors = {[134 31 65] ./ 256, [0 118 168] ./ 256, [100 167 11] ./ 256};
+samples = fieldnames(inSituLoadingData);
+forceBounds = [3 300];
+lengths = 1.5; % mm
+widths = [.4 .46 .355]; % mm
+
+% Cross sections
+crossSections = lengths .* widths;
+
+% Plotting displacement vs load with min/max force bounds
+for i = 1:numel(samples)
+    figure;
+    currentTable = inSituLoadingData.(samples{i});
+    plotDisplacementStressBounds(currentTable, crossSections(i), forceBounds, colors{i})
+
+    xlabel("Relative Displacement (um)");
+    ylabel("Stress (MPa)");
+    title(sprintf("%s w/ Force Bounds (%dlb -> %dlb)",samples{i},forceBounds))
+    ylim([0 1400])
+end
+
