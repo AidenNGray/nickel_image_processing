@@ -176,3 +176,28 @@ for i = 1:numel(samples)
     ylim([0 1400])
 end
 
+%% Displacement vs stress
+% Configs
+colors = ['r' 'b' 'g'];
+samples = fieldnames(inSituLoadingData);
+forceBounds = [2.6 300]; % in pounds
+lengths = 1.5; % mm
+widths = [.43 .46 .355]; % mm
+
+% Cross sections
+crossSections = lengths .* widths;
+
+% Plotting displacement vs load with min/max force bounds
+figure;
+hold on;
+for i = 1:numel(samples)
+    currentTable = inSituLoadingData.(samples{i});
+    plotDisplacementStressBounds(currentTable, crossSections(i), forceBounds, colors(i))
+end
+xlabel("Relative Displacement (um)");
+ylabel("Stress (MPa)");
+title(sprintf("In Situ Force Data w/ Force Bounds (%.0flb -> %.0flb)",forceBounds))
+legend(samples, "Location","southeast")
+
+hold off;
+
